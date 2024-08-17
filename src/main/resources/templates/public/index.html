@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strzelnica sportowa Snajper strona główna</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+
+        /* Styl dla sekcji aktualności */
+        .news-section {
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .news-section h2 {
+            text-align: center;
+        }
+
+        .news-post {
+            background: #fff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-post h3 {
+            margin-top: 0;
+        }
+
+        .news-post p {
+            margin-bottom: 10px;
+        }
+
+        .news-post a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .news-post a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Wstawienie fragmentu nagłówka -->
+<div th:replace="fragments/public/header :: header"></div>
+
+<!-- Wstawienie fragmentu menu -->
+<div th:replace="fragments/public/menu :: menu"></div>
+
+<div class="banner">
+    <h2>Book Your Shooting Lanes Easily</h2>
+</div>
+<div class="container">
+    <div class="news-section">
+        <h2>Aktualności</h2>
+        <!-- Przykładowe posty aktualności -->
+        <div class="news-post">
+            <h3>Nowe godziny otwarcia</h3>
+            <p>Od przyszłego tygodnia zmieniamy godziny otwarcia. Sprawdź nasze nowe godziny pracy.</p>
+            <a href="#">Czytaj więcej</a>
+        </div>
+        <div class="news-post">
+            <h3>Wydarzenie specjalne w tym miesiącu</h3>
+            <p>Nie przegap naszego specjalnego wydarzenia w tym miesiącu. Więcej szczegółów wkrótce!</p>
+            <a href="#">Czytaj więcej</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Make a Reservation - Shooting Range Book</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="header">
+    <h1>Make a Reservation</h1>
+</div>
+<div class="container">
+    <h2>Reservation for Lane <span th:text="${lane.name}">Lane Name</span> at <span th:text="${hour}">Hour</span></h2>
+    <form th:action="@{/reserve}" method="post">
+        <input type="hidden" name="laneId" th:value="${lane.id}" />
+        <input type="hidden" name="hour" th:value="${hour}" />
+        <div>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required />
+        </div>
+        <button type="submit">Reserve</button>
+    </form>
+</div>
+</body>
+</html>

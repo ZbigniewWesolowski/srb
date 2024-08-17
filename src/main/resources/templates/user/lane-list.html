@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose a Lane - Shooting Range Book</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="header">
+    <h1>Select a Lane</h1>
+</div>
+<div class="container">
+    <h2>Available Lanes</h2>
+    <div th:each="lane : ${lanes}" class="card">
+        <h3 th:text="${lane.name}">Lane Name</h3>
+        <a th:href="@{/hours/{laneId}(laneId=${lane.id})}">View Available Hours</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+/* Ogólne style dla body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styl dla nagłówka */
+.header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.header img {
+    max-width: 150px; /* Maksymalna szerokość logo */
+    height: auto; /* Utrzymanie proporcji */
+}
+
+/* Styl dla banera */
+.banner {
+    background-image: url('/images/banner.jpg');
+    background-size: cover;
+    color: white;
+    text-align: center;
+    padding: 100px 0;
+}
+
+/* Styl dla kontenera */
+.container {
+    padding: 20px;
+}
+
+/* Styl dla nagłówka w kontenerze */
+.container h1 {
+    text-align: center;
+}
+
+/* Styl dla kart */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.card a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+
+
+/* Styl dla menu */
+.menu {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.menu ul li {
+    margin: 0 15px;
+}
+
+.menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Styl dla obrazu w sekcji kontakt */
+.card img {
+    max-width: 100px; /* Maksymalna szerokość obrazu w sekcji kontakt */
+    height: auto; /* Utrzymanie proporcji */
+}
+
+/* Styl dla kontenera logowania */
+.login-container {
+    width: 100%;
+    max-width: 400px; /* Maksymalna szerokość kontenera logowania */
+    margin: 40px auto; /* Wyśrodkowanie kontenera */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* Tło kontenera logowania */
+    text-align: center;
+}
+
+/* Styl dla nagłówka formularza logowania */
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #4CAF50; /* Kolor nagłówka */
+}
+
+/* Styl dla etykiet formularza logowania */
+.login-container label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Styl dla pól formularza logowania */
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Styl dla przycisku formularza logowania */
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #45a049; /* Kolor przycisku po najechaniu */
+}
+
+/* Styl dla komunikatów błędów */
+.login-container p {
+    color: red;
+    margin-top: 10px;
+}
+/* Styl dla formularza kontaktowego */
+.container {
+    padding: 20px;
+    max-width: 600px; /* Maksymalna szerokość formularza */
+    margin: 40px auto; /* Wyśrodkowanie formularza */
+    background-color: #f9f9f9; /* Tło formularza */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styl dla nagłówka formularza */
+.container h1 {
+    text-align: center;
+    color: #4CAF50; /* Kolor nagłówka */
+    margin-bottom: 20px;
+}
+
+/* Styl dla grupy formularza */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Styl dla etykiet formularza */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Styl dla pól tekstowych formularza */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Uwzględnia padding w szerokości */
+}
+
+/* Styl dla pola tekstowego */
+.form-group textarea {
+    height: 150px; /* Wysokość pola tekstowego */
+    resize: vertical; /* Pozwala na pionowe zmienianie rozmiaru */
+}
+
+/* Styl dla przycisku formularza */
+.form-group button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-group button:hover {
+    background-color: #45a049; /* Kolor przycisku po najechaniu */
+}
+
+/* Styl dla komunikatu sukcesu */
+.message {
+    display: none; /* Domyślnie ukryty */
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    margin-top: 20px;
+    text-align: center;
+}

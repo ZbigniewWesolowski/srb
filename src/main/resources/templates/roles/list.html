@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Ról</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<header>
+    <h1>Lista Ról</h1>
+    <nav>
+        <ul>
+            <li><a href="/">Strona Główna</a></li>
+            <li><a href="/roles/create">Dodaj Rolę</a></li>
+            <li><a href="/roles">Zarządzaj Rolami</a></li>
+            <!-- Dodaj inne linki nawigacyjne -->
+        </ul>
+    </nav>
+</header>
+<main>
+    <h2>Wszystkie Role</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.id}">ID</td>
+            <td th:text="${role.name}">Nazwa</td>
+            <td>
+                <a th:href="@{/roles/edit/{id}(id=${role.id})}">Edytuj</a>
+                <a th:href="@{/roles/delete/{id}(id=${role.id})}" onclick="return confirm('Czy na pewno chcesz usunąć tę rolę?')">Usuń</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer>
+    <p>&copy; 2024 Strzelnica</p>
+</footer>
+</body>
+</html>

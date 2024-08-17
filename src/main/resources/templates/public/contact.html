@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Napisz do nas</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div th:replace="fragments/public/header :: header"></div>
+
+<div th:replace="fragments/public/menu :: menu"></div>
+<div class="container">
+    <h1>Napisz do nas! :)</h1>
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="name">Imię i nazwisko:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Adres email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="message">Treść wiadomości:</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">Wyślij</button>
+        </div>
+        <div class="message" id="successMessage">Dziękujemy za wiadomość!</div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Zapobiega domyślnemu wysyłaniu formularza
+
+        // Wyświetlenie komunikatu
+        document.getElementById('successMessage').style.display = 'block';
+
+        // Opcjonalnie, można tutaj dodać kod do wysyłania formularza do serwera
+        // np. poprzez AJAX lub Fetch API
+    });
+</script>
+</body>
+</html>
