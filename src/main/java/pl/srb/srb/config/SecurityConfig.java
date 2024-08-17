@@ -4,6 +4,7 @@ package pl.srb.srb.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,9 +25,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/about", "/gallery", "/**").permitAll() // Zezwól na dostęp do strony głównej i logowania bez logowania
-                        .anyRequest().authenticated() // Wymagaj uwierzytelnienia dla wszystkich innych stron
+                                .anyRequest().permitAll() // Zezwala na dostęp do wszystkich stron bez logowania
+//                        .requestMatchers("/", "/about", "/gallery", "/**").permitAll() // Zezwól na dostęp do strony głównej i logowania bez logowania
+//                        .requestMatchers("/reserve").hasRole("USER")  // Tylko dla użytkowników z rolą USER
+//                        .anyRequest().authenticated() // Wymagaj uwierzytelnienia dla wszystkich innych stron
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Ustawienie strony logowania

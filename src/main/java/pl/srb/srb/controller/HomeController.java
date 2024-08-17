@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    //TODO poprzenosić metody do osbnych kontrolerów a nie w jednym
+
     @GetMapping("/")
     public String index() {
         return "public/index";
@@ -23,7 +25,7 @@ public class HomeController {
     public String gallery() { return "public/gallery";}
 
     @GetMapping("/test")
-    public String test() { return "public/test";}
+    public String test() { return "/test";}
 
 
 

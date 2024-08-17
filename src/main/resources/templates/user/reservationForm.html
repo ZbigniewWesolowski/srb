@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezerwacja toru</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div th:replace="fragments/user/header :: header"></div>
+<div th:replace="fragments/user/menu :: menu"></div>
+
+<div class="container">
+    <h1>Rezerwacja Toru</h1>
+    <form id="reservationForm" action="/user/reserve" method="post">
+        <div class="form-group">
+            <label for="lane">Wybierz tor:</label>
+            <select id="lane" name="laneId" required>
+                <!-- Opcje torów będą dodane dynamicznie przez JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date">Data:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="startTime">Godzina rozpoczęcia:</label>
+            <select id="startTime" name="startHour" required>
+                <!-- Opcje godzinowe będą dodane dynamicznie przez JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="endTime">Godzina zakończenia:</label>
+            <select id="endTime" name="endHour" required>
+                <!-- Opcje godzinowe będą dodane dynamicznie przez JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit">Zarezerwuj</button>
+        </div>
+        <input type="hidden" name="userId" value="1" />
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const laneSelect = document.getElementById('lane');
+        const startTimeSelect = document.getElementById('startTime');
+        const endTimeSelect = document.getElementById('endTime');
+        const dateInput = document.getElementById('date');
+
+        function populateLaneOptions() {
+            // Przykładowe dane torów. Możesz zamienić na dane z serwera.
+            const lanes = [
+                { id: 1, name: 'Tor 1' },
+                { id: 2, name: 'Tor 2' },
+                { id: 3, name: 'Tor 3' }
+            ];
+
+            lanes.forEach(lane => {
+                const option = document.createElement('option');
+                option.value = lane.id;
+                option.textContent = lane.name;
+                laneSelect.appendChild(option);
+            });
+        }
+
+        function populateTimeOptions() {
+            const hours = Array.from({ length: 11 }, (_, i) => i + 8); // Godziny od 8 do 18
+
+            // Ustaw godziny startu
+            hours.forEach(hour => {
+                const hourStr = hour.toString().padStart(2, '0');
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = hourStr + ':00';
+                startTimeSelect.appendChild(option);
+            });
+
+            // Ustaw godziny zakończenia
+            hours.forEach(hour => {
+                const hourStr = hour.toString().padStart(2, '0');
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = hourStr + ':00';
+                endTimeSelect.appendChild(option);
+            });
+        }
+
+        function updateEndTimeOptions() {
+            const selectedStartHour = parseInt(startTimeSelect.value, 10);
+            const endOptions = Array.from(endTimeSelect.options);
+
+            endOptions.forEach(option => {
+                const optionHour = parseInt(option.value, 10);
+                if (optionHour <= selectedStartHour) {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = 'block';
+                }
+            });
+
+            // Przestaw domyślną godzinę zakończenia, jeśli jest mniejsza lub równa godzinie startu
+            if (endTimeSelect.value && parseInt(endTimeSelect.value, 10) <= selectedStartHour) {
+                endTimeSelect.value = '';
+            }
+        }
+
+        // Inicjalizacja
+        populateLaneOptions();
+        populateTimeOptions();
+
+        startTimeSelect.addEventListener('change', updateEndTimeOptions);
+    });
+</script>
+</body>
+</html>
