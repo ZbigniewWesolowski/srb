@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import pl.srb.srb.model.Lane;
 import pl.srb.srb.model.Reservation;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +17,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                                   @Param("startTime") LocalDateTime startTime,
                                                   @Param("endTime") LocalDateTime endTime);
 
-    boolean existsByLaneAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+    boolean existsByLaneAndStartTimeLessThanAndEndTimeGreaterThan(
             Lane lane, LocalDateTime startTime, LocalDateTime endTime);
+
+
+        List<Reservation> findByUserIdAndStartTimeBefore(Long userId, LocalDateTime endTime);
+
+    List<Reservation> findByUserIdAndEndTimeAfter(Long userId, LocalDateTime now);
 }

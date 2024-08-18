@@ -122,8 +122,33 @@
         }
 
         function reserveLane(laneId, date, hour) {
-            // Tu można dodać logikę rezerwacji
-            alert(`Rezerwacja toru ${laneId} na ${date} o godzinie ${hour}:00`);
+            const userId = 1; // Ustaw odpowiednie ID użytkownika
+
+            fetch('/user/reserve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    laneId: laneId,
+                    userId: userId,
+                    date: date,
+                    startHour: hour,
+                    endHour: parseInt(hour) + 1 // Zarezerwuj godzinę od `hour` do `hour + 1`
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert(`Rezerwacja toru ${laneId} na ${date} o godzinie ${hour}:00 została dokonana.`);
+                        loadAvailability(); // Odśwież dostępność
+                    } else {
+                        alert('Nie udało się dokonać rezerwacji.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error reserving lane:', error);
+                    alert('Wystąpił błąd podczas rezerwacji.');
+                });
         }
 
         loadAvailability();

@@ -61,6 +61,20 @@ public class ReservationService {
         lane.setId(laneId);
 
         // Sprawdź, czy istnieje kolidująca rezerwacja
-        return reservationRepository.existsByLaneAndStartTimeLessThanEqualAndEndTimeGreaterThan(lane, endTime, startTime);
+        return reservationRepository.existsByLaneAndStartTimeLessThanAndEndTimeGreaterThan(lane, endTime, startTime);
+    }
+
+    public List<Reservation> getPastReservationsForUser(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        return reservationRepository.findByUserIdAndStartTimeBefore(userId, now);
+    }
+
+    public void cancelReservation(Long reservationId) {
+        reservationRepository.deleteById(reservationId);
+    }
+
+    public List<Reservation> getUpcomingReservationsForUser(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        return reservationRepository.findByUserIdAndEndTimeAfter(userId, now);
     }
 }

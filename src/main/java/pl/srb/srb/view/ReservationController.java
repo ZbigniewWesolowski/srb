@@ -1,5 +1,5 @@
 // ReservationController.java
-package pl.srb.srb.controller;
+package pl.srb.srb.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -63,12 +63,12 @@ public class ReservationController {
             @RequestParam Integer endHour) {
 
 
-        if (startHour >= endHour || startHour < 8 || endHour > 18) {
-            return "redirect:/user/home"; // Można przekierować na stronę z błędem
+        if (startHour >= endHour || startHour < 9 || endHour > 18) {
+            return "redirect:/user/home";
         }
 
         Lane lane = laneRepository.findById(laneId).orElseThrow(() -> new IllegalArgumentException("Invalid lane Id:" + "1"));
-        User user = userRepository.findById(Long.valueOf("1")).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + "1"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + "1"));
 
         LocalDateTime startTime = LocalDateTime.of(date, LocalTime.of(startHour, 0));
         LocalDateTime endTime = LocalDateTime.of(date, LocalTime.of(endHour, 0));
@@ -127,4 +127,11 @@ public class ReservationController {
 
         return allLanesAvailability;
     }
+    @PostMapping("/user/cancel-reservation")
+    public String cancelReservation(@RequestParam Long reservationId) {
+        reservationService.cancelReservation(reservationId);
+        return "redirect:/user/home";
+    }
+
+
 }

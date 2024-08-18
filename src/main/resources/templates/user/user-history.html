@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Strzelnica sportowa Snajper strona główna</title>
+    <title>Rezerwacja Toru</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
         .reservation-table {
@@ -27,28 +27,13 @@
         .reservation-table td {
             word-wrap: break-word; /* Allows long text to wrap within cells */
         }
-        .cancel-button {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .cancel-button:hover {
-            background-color: #ff1a1a;
-        }
     </style>
 </head>
 <body>
-<!-- Wstawienie fragmentu nagłówka -->
 <div th:replace="fragments/user/header :: header"></div>
-
-<!-- Wstawienie fragmentu menu -->
 <div th:replace="fragments/user/menu :: menu"></div>
-
 <div class="container">
-    <h1>Rezerwacje na nadchodzące dni</h1>
+    <h1>Historia Treningów</h1>
 
     <table class="reservation-table">
         <thead>
@@ -57,25 +42,17 @@
             <th>Start treningu</th>
             <th>Koniec treningu</th>
             <th>Tor</th>
-            <th>Odwołaj</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="reservation : ${upcomingReservations}">
-            <td th:text="${reservation.startDate}"></td>
-            <td th:text="${reservation.startTime}"></td>
-            <td th:text="${reservation.endTime}"></td>
-            <td th:text="${reservation.laneName}"></td>
-            <td>
-                <form th:action="@{/user/cancel-reservation}" method="post">
-                    <input type="hidden" name="reservationId" th:value="${reservation.id}" />
-                    <button type="submit" class="cancel-button">Odwołaj</button>
-                </form>
-            </td>
+        <tr th:each="reservationDto : ${pastReservationsDtos}">
+            <td th:text="${reservationDto.startDate}"></td>
+            <td th:text="${reservationDto.startTime}"></td>
+            <td th:text="${reservationDto.endTime}"></td>
+            <td th:text="${reservationDto.laneName}"></td>
         </tr>
         </tbody>
     </table>
 </div>
-
 </body>
 </html>

@@ -1,4 +1,4 @@
-package pl.srb.srb.controller;
+package pl.srb.srb.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
