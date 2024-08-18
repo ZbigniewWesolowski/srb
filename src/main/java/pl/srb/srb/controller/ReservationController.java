@@ -2,22 +2,29 @@
 package pl.srb.srb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import pl.srb.srb.model.Lane;
 import pl.srb.srb.model.Reservation;
 import pl.srb.srb.model.User;
 import pl.srb.srb.repository.LaneRepository;
 import pl.srb.srb.repository.ReservationRepository;
 import pl.srb.srb.repository.UserRepository;
+import pl.srb.srb.service.LaneService;
+import pl.srb.srb.service.ReservationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -31,6 +38,10 @@ public class ReservationController {
 
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private LaneService laneService;
 
     @GetMapping("user/reservationForm")
     public String showReservationForm(Model model) {
@@ -56,7 +67,7 @@ public class ReservationController {
             return "redirect:/user/home"; // Można przekierować na stronę z błędem
         }
 
-        Lane lane = laneRepository.findById(Long.valueOf("1")).orElseThrow(() -> new IllegalArgumentException("Invalid lane Id:" + "1"));
+        Lane lane = laneRepository.findById(laneId).orElseThrow(() -> new IllegalArgumentException("Invalid lane Id:" + "1"));
         User user = userRepository.findById(Long.valueOf("1")).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + "1"));
 
         LocalDateTime startTime = LocalDateTime.of(date, LocalTime.of(startHour, 0));
@@ -75,7 +86,45 @@ public class ReservationController {
 
     private List<Integer> getAvailableHours() {
         return List.of(
-                8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+                9, 10, 11, 12, 13, 14, 15, 16, 17
         );
+    }
+
+    @GetMapping("/user/check-availability")
+    public ResponseEntity<Boolean> checkAvailability(
+            @RequestParam Long laneId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam Integer startHour,
+            @RequestParam Integer endHour) {
+
+        boolean isAvailable = reservationService.isLaneAvailable(laneId, date, startHour, endHour);
+        return ResponseEntity.ok(isAvailable);
+    }
+
+    @GetMapping("/api/availability")
+    @ResponseBody
+    public Map<Long, Map<LocalDate, Map<Integer, Boolean>>> getAvailability(
+            @RequestParam(value = "startDate", required = false) String startDateParam) {
+        LocalDate startDate = (startDateParam != null) ? LocalDate.parse(startDateParam) : LocalDate.now();
+
+        Map<Long, Map<LocalDate, Map<Integer, Boolean>>> allLanesAvailability = new HashMap<>();
+
+        List<Lane> lanes = laneService.getAllLanes(); // Zakładam, że masz metodę do pobierania wszystkich torów
+
+        for (Lane lane : lanes) {
+            Map<LocalDate, Map<Integer, Boolean>> availability = new HashMap<>();
+            for (int dayOffset = 1; dayOffset < 7; dayOffset++) {
+                LocalDate date = startDate.plusDays(dayOffset);
+                Map<Integer, Boolean> dailyAvailability = new HashMap<>();
+                for (int hour = 9; hour <= 17; hour++) {
+                    boolean isAvailable = !reservationService.isLaneReservedOnDateAtHour(lane.getId(), date, hour);
+                    dailyAvailability.put(hour, isAvailable);
+                }
+                availability.put(date, dailyAvailability);
+            }
+            allLanesAvailability.put(lane.getId(), availability);
+        }
+
+        return allLanesAvailability;
     }
 }

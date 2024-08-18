@@ -2,8 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Rezerwacja toru</title>
+    <title>Rezerwacja Toru</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+        .lane-container {
+            margin-bottom: 20px;
+        }
+        .date-row {
+            margin-bottom: 10px;
+        }
+        .date-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .hour-buttons {
+            display: flex;
+            flex-wrap: nowrap; /* Zapobiega zawijaniu się przycisków */
+            gap: 5px;
+            overflow-x: auto; /* Dodaje poziome przewijanie, jeśli konieczne */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .hour-button {
+            padding: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            flex: 0 0 auto; /* Przyciski nie rosną, ani nie kurczą się */
+            width: 60px; /* Można dostosować szerokość */
+            text-align: center;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        .error-message {
+            color: red;
+        }
+        @media (max-width: 850px) {
+            .hour-button {
+                font-size: 0.8rem; /* Mniejsza czcionka na małych ekranach */
+            }
+        }
+    </style>
 </head>
 <body>
 <div th:replace="fragments/user/header :: header"></div>
@@ -11,105 +54,79 @@
 
 <div class="container">
     <h1>Rezerwacja Toru</h1>
-    <form id="reservationForm" action="/user/reserve" method="post">
-        <div class="form-group">
-            <label for="lane">Wybierz tor:</label>
-            <select id="lane" name="laneId" required>
-                <!-- Opcje torów będą dodane dynamicznie przez JavaScript -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="date">Data:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-            <label for="startTime">Godzina rozpoczęcia:</label>
-            <select id="startTime" name="startHour" required>
-                <!-- Opcje godzinowe będą dodane dynamicznie przez JavaScript -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="endTime">Godzina zakończenia:</label>
-            <select id="endTime" name="endHour" required>
-                <!-- Opcje godzinowe będą dodane dynamicznie przez JavaScript -->
-            </select>
-        </div>
-        <div class="form-group">
-            <button type="submit">Zarezerwuj</button>
-        </div>
-        <input type="hidden" name="userId" value="1" />
-    </form>
+    <div id="availabilityGrid" class="availability-grid"></div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const laneSelect = document.getElementById('lane');
-        const startTimeSelect = document.getElementById('startTime');
-        const endTimeSelect = document.getElementById('endTime');
-        const dateInput = document.getElementById('date');
+        const availabilityGrid = document.getElementById('availabilityGrid');
 
-        function populateLaneOptions() {
-            // Przykładowe dane torów. Możesz zamienić na dane z serwera.
-            const lanes = [
-                { id: 1, name: 'Tor 1' },
-                { id: 2, name: 'Tor 2' },
-                { id: 3, name: 'Tor 3' }
-            ];
+        function loadAvailability() {
+            const startDate = new Date().toISOString().split('T')[0];
 
-            lanes.forEach(lane => {
-                const option = document.createElement('option');
-                option.value = lane.id;
-                option.textContent = lane.name;
-                laneSelect.appendChild(option);
-            });
+            fetch(`/api/availability?startDate=${startDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    availabilityGrid.innerHTML = '';
+
+                    for (const [laneId, dates] of Object.entries(data)) {
+                        const laneContainer = document.createElement('div');
+                        laneContainer.classList.add('lane-container');
+                        const laneHeader = document.createElement('h2');
+                        laneHeader.textContent = `Tor ${laneId}`;
+                        laneContainer.appendChild(laneHeader);
+
+                        // Sortuj daty w rosnącej kolejności
+                        const sortedDates = Object.keys(dates).sort((a, b) => new Date(a) - new Date(b));
+
+                        for (const date of sortedDates) {
+                            const hours = dates[date];
+                            const dateRow = document.createElement('div');
+                            dateRow.classList.add('date-row');
+
+                            const dateHeader = document.createElement('div');
+                            dateHeader.classList.add('date-header');
+                            dateHeader.textContent = new Date(date).toLocaleDateString(); // Formatowanie daty
+                            dateRow.appendChild(dateHeader);
+
+                            const hourButtonsContainer = document.createElement('div');
+                            hourButtonsContainer.classList.add('hour-buttons');
+
+                            for (const [hour, isAvailable] of Object.entries(hours)) {
+                                const hourButton = document.createElement('button');
+                                hourButton.textContent = `${hour}:00`;
+                                hourButton.classList.add('hour-button');
+                                hourButton.style.backgroundColor = isAvailable ? 'green' : 'red';
+                                hourButton.disabled = !isAvailable;
+
+                                if (isAvailable) {
+                                    hourButton.addEventListener('click', function() {
+                                        reserveLane(laneId, date, hour);
+                                    });
+                                }
+
+                                hourButtonsContainer.appendChild(hourButton);
+                            }
+
+                            dateRow.appendChild(hourButtonsContainer);
+                            laneContainer.appendChild(dateRow);
+                        }
+
+                        availabilityGrid.appendChild(laneContainer);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading availability:', error);
+                    availabilityGrid.innerHTML = '<div class="error-message">Wystąpił błąd podczas ładowania dostępności. Proszę spróbować ponownie później.</div>';
+                });
         }
 
-        function populateTimeOptions() {
-            const hours = Array.from({ length: 11 }, (_, i) => i + 8); // Godziny od 8 do 18
-
-            // Ustaw godziny startu
-            hours.forEach(hour => {
-                const hourStr = hour.toString().padStart(2, '0');
-                const option = document.createElement('option');
-                option.value = hour;
-                option.textContent = hourStr + ':00';
-                startTimeSelect.appendChild(option);
-            });
-
-            // Ustaw godziny zakończenia
-            hours.forEach(hour => {
-                const hourStr = hour.toString().padStart(2, '0');
-                const option = document.createElement('option');
-                option.value = hour;
-                option.textContent = hourStr + ':00';
-                endTimeSelect.appendChild(option);
-            });
+        function reserveLane(laneId, date, hour) {
+            // Tu można dodać logikę rezerwacji
+            alert(`Rezerwacja toru ${laneId} na ${date} o godzinie ${hour}:00`);
         }
 
-        function updateEndTimeOptions() {
-            const selectedStartHour = parseInt(startTimeSelect.value, 10);
-            const endOptions = Array.from(endTimeSelect.options);
-
-            endOptions.forEach(option => {
-                const optionHour = parseInt(option.value, 10);
-                if (optionHour <= selectedStartHour) {
-                    option.style.display = 'none';
-                } else {
-                    option.style.display = 'block';
-                }
-            });
-
-            // Przestaw domyślną godzinę zakończenia, jeśli jest mniejsza lub równa godzinie startu
-            if (endTimeSelect.value && parseInt(endTimeSelect.value, 10) <= selectedStartHour) {
-                endTimeSelect.value = '';
-            }
-        }
-
-        // Inicjalizacja
-        populateLaneOptions();
-        populateTimeOptions();
-
-        startTimeSelect.addEventListener('change', updateEndTimeOptions);
+        loadAvailability();
     });
 </script>
 </body>
