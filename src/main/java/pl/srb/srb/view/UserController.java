@@ -48,6 +48,11 @@ public class UserController {
         return "user/home"; // Nazwa widoku, który wyświetla nadchodzące rezerwacje
     }
 
+    @GetMapping("/user/user-contact")
+    public String userContact(){
+        return "user/user-contact";
+    }
+
 
 }
 
