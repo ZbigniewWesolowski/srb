@@ -38,14 +38,14 @@ public class UserController {
 
     @GetMapping("/user/home")
     public String getUpcomingReservations(Model model) {
-        Long userId = Long.valueOf("1"); // Można zmienić na dynamiczne pobieranie
+        Long userId = Long.valueOf("1"); //TODO dodać obsługę wielu użytkowników
         List<Reservation> upcomingReservations = reservationService.getUpcomingReservationsForUser(userId);
         List<ReservationDto> upcomingReservationsDtos = upcomingReservations.stream()
                 .map(reservationDtoMapper::mappingToDto)
                 .collect(Collectors.toList());
 
         model.addAttribute("upcomingReservations", upcomingReservationsDtos);
-        return "user/home"; // Nazwa widoku, który wyświetla nadchodzące rezerwacje
+        return "user/home";
     }
 
     @GetMapping("/user/user-contact")

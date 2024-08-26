@@ -12,4 +12,5 @@ public class ReservationDto {
         private String startTime;
         private String endTime;
         private String laneName;
+        private String userName;
 }

@@ -28,19 +28,50 @@
         <div class="form-group">
             <button type="submit">Wyślij</button>
         </div>
-        <div class="message" id="successMessage">Dziękujemy za wiadomość!</div>
+        <div class="message" id="successMessage" style="display:none;">Dziękujemy za wiadomość!</div>
+        <div class="message" id="errorMessage" style="display:none; color:red;">Wystąpił błąd podczas wysyłania wiadomości.</div>
     </form>
 </div>
+
 
 <script>
     document.getElementById('contactForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Zapobiega domyślnemu wysyłaniu formularza
 
-        // Wyświetlenie komunikatu
-        document.getElementById('successMessage').style.display = 'block';
+        const message = document.getElementById('name').value + '; ' + document.getElementById('message').value;
+        const email = document.getElementById('email').value;
 
-        // Opcjonalnie, można tutaj dodać kod do wysyłania formularza do serwera
-        // np. poprzez AJAX lub Fetch API
+
+        // Przesyłanie danych w formacie application/x-www-form-urlencoded
+        fetch('/public/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                email: email,
+                messageString: message
+
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('message').value = ''; // Czyszczenie pola tekstowego po sukcesie
+                    document.getElementById('email').value = ''; // Czyszczenie pola tekstowego po sukcesie
+                    document.getElementById('name').value = ''; // Czyszczenie pola tekstowego po sukcesie
+                    document.getElementById('errorMessage').style.display = 'none';
+                } else {
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('successMessage').style.display = 'none';
+                    return response.text().then(text => alert(text)); // Wyświetlenie błędu z odpowiedzi
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+            });
     });
 </script>
 </body>

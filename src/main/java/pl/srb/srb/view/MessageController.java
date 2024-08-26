@@ -23,7 +23,7 @@ public class MessageController {
     MessageRepository messageRepository;
 
     @PostMapping("user/sendMessage")
-    public String submitReservation(
+    public String userSubmitMessage(
 
             @RequestParam Long userId,
             @RequestParam String messageString) {
@@ -35,8 +35,21 @@ public class MessageController {
         message.setDate(Date.from(LocalDateTime.now().atZone(ZoneId.of("Europe/Warsaw")).toInstant()));
         messageRepository.save(message);
 
-
-
         return "redirect:/user/home";
+    }
+
+    @PostMapping("public/sendMessage")
+    public String publicSubmitMessage(
+
+            @RequestParam String email,
+            @RequestParam String messageString) {
+
+        Message message = new Message();
+        message.setReplayTo(email);
+        message.setMessage(messageString);
+        message.setDate(Date.from(LocalDateTime.now().atZone(ZoneId.of("Europe/Warsaw")).toInstant()));
+        messageRepository.save(message);
+
+        return "redirect:/";
     }
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+<!--    <link rel="stylesheet" href="static/css/styles.css">-->
+    <style>
+        /* Styl dla menu */
+        .menu {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .menu ul li {
+            margin: 0 15px;
+        }
+
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<div class="menu" th:fragment="menu">
+    <ul>
+        <li><a href="/admin/home">Wiadomości</a></li>
+        <li><a href="/admin/upcoming-reservation">Rezerwacje</a></li>
+        <li><a href="/admin/past-reservations">Historia</a></li>
+        <li><a href="/admin/users">Użytkownicy</a></li>
+        <li><a href="/login">Wyloguj</a></li>
+    </ul>
+</div>
+</body>
+</html>

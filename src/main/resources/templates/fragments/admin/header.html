@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Header Fragment</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Styl dla nagłówka */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa; /* Tło nagłówka */
+        }
+
+        /* Styl dla logo */
+        .header img {
+            max-width: 150px; /* Maksymalna szerokość logo */
+            height: auto; /* Utrzymanie proporcji */
+        }
+
+        /* Styl dla tytułu */
+        .header h1 {
+            font-size: 2em;
+            margin: 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<!-- Fragment nagłówka -->
+<div class="header" th:fragment="header">
+    <img src="/images/logo.png" alt="Shooting Range Book Logo">
+    <h1>Strzelnica sportowa Snajper.</h1>
+</div>
+</body>
+</html>

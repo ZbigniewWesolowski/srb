@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strzelnica sportowa Snajper strona główna</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .reservation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .reservation-table th, .reservation-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .reservation-table th {
+            background-color: #f4f4f4;
+        }
+        .reservation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .reservation-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .reservation-table td {
+            word-wrap: break-word; /* Allows long text to wrap within cells */
+        }
+        /* Now adjust column widths */
+        .date-col {
+            width: 20%; /* Adjust this value as needed */
+        }
+        .email-col {
+            width: 20%; /* Adjust this value as needed */
+        }
+        .message-col {
+            width: 60%; /* This column will take up the remaining space */
+        }
+        .cancel-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .cancel-button:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+<!-- Wstawienie fragmentu nagłówka -->
+<div th:replace="fragments/admin/header :: header"></div>
+
+<!-- Wstawienie fragmentu menu -->
+<div th:replace="fragments/admin/menu :: menu"></div>
+
+<!-- Wyświetlanie wiadomości -->
+<div>
+    <table class="reservation-table">
+        <thead>
+        <tr>
+            <th class="date-col">Data</th>
+            <th class="email-col">Adres email</th>
+            <th class="message-col">Treść</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iteracja przez listę wiadomości -->
+        <tr th:each="message : ${messages}">
+            <td class="date-col" th:text="${#dates.format(message.date, 'dd-MM-yyyy HH:mm')}"></td>
+            <td class="email-col" th:text="${message.replayTo}"></td>
+            <td class="message-col" th:text="${message.message}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

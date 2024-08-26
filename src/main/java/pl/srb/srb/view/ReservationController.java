@@ -109,7 +109,7 @@ public class ReservationController {
 
         Map<Long, Map<LocalDate, Map<Integer, Boolean>>> allLanesAvailability = new HashMap<>();
 
-        List<Lane> lanes = laneService.getAllLanes(); // Zakładam, że masz metodę do pobierania wszystkich torów
+        List<Lane> lanes = laneService.getAllLanes();
 
         for (Lane lane : lanes) {
             Map<LocalDate, Map<Integer, Boolean>> availability = new HashMap<>();
@@ -128,10 +128,14 @@ public class ReservationController {
         return allLanesAvailability;
     }
     @PostMapping("/user/cancel-reservation")
-    public String cancelReservation(@RequestParam Long reservationId) {
+    public String userCancelReservation(@RequestParam Long reservationId) {
         reservationService.cancelReservation(reservationId);
         return "redirect:/user/home";
     }
-
+    @PostMapping("/admin/cancel-reservation")
+    public String adminCancelReservation(@RequestParam Long reservationId) {
+        reservationService.cancelReservation(reservationId);
+        return "redirect:/admin/upcoming-reservation";
+    }
 
 }

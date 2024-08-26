@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strzelnica sportowa Snajper strona główna</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .reservation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .reservation-table th, .reservation-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .reservation-table th {
+            background-color: #f4f4f4;
+        }
+        .reservation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .reservation-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .reservation-table td {
+            word-wrap: break-word; /* Allows long text to wrap within cells */
+        }
+        .cancel-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .cancel-button:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+<!-- Wstawienie fragmentu nagłówka -->
+<div th:replace="fragments/admin/header :: header"></div>
+
+<!-- Wstawienie fragmentu menu -->
+<div th:replace="fragments/admin/menu :: menu"></div>
+
+<div class="container">
+
+    <table class="reservation-table">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Start treningu</th>
+            <th>Koniec treningu</th>
+            <th>Tor</th>
+            <th>Login</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservationDto : ${reservationDtoList}">
+            <td th:text="${reservationDto.startDate}"></td>
+            <td th:text="${reservationDto.startTime}"></td>
+            <td th:text="${reservationDto.endTime}"></td>
+            <td th:text="${reservationDto.laneName}"></td>
+            <td th:text="${reservationDto.userName}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

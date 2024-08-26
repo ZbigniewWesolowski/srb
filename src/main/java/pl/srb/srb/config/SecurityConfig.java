@@ -28,9 +28,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                                 .anyRequest().permitAll() // Zezwala na dostęp do wszystkich stron bez logowania
-//                        .requestMatchers("/", "/about", "/gallery", "/**").permitAll() // Zezwól na dostęp do strony głównej i logowania bez logowania
-//                        .requestMatchers("/reserve").hasRole("USER")  // Tylko dla użytkowników z rolą USER
-//                        .anyRequest().authenticated() // Wymagaj uwierzytelnienia dla wszystkich innych stron
+
+//                        .requestMatchers("/", "/public/**").permitAll() // Publiczne ścieżki dostępne bez logowania
+//                        .requestMatchers("/user/**").hasRole("USER")  // Ścieżki użytkownika wymagają roli USER
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") // Ścieżki administratora wymagają roli ADMIN
+//                        .anyRequest().authenticated() // Wymaga uwierzytelnienia dla pozostałych ścieżek
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Ustawienie strony logowania
@@ -47,7 +49,6 @@ public class SecurityConfig {
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                 org.springframework.security.core.Authentication authentication)
                     throws IOException, ServletException {
-                // Sprawdzenie roli użytkownika
                 if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                     response.sendRedirect("/admin/home");
                 } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
@@ -62,7 +63,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // Tworzenie użytkowników w pamięci dla testów
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("password")

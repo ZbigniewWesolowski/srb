@@ -1,5 +1,4 @@
 package pl.srb.srb.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.srb.srb.model.Lane;
@@ -14,12 +13,8 @@ import java.util.List;
 @Service
 public class ReservationService {
 
-    private final ReservationRepository reservationRepository;
-
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
-    }
+    ReservationRepository reservationRepository;
 
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
@@ -36,11 +31,12 @@ public class ReservationService {
     public void deleteReservation(Long id) {
         reservationRepository.deleteById(id);
     }
+
     public List<String> getAvailableHours(Long laneId) {
         return List.of("09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00");
     }
+
     public void reserve(Long laneId, String hour, String name, String email) {
-        //TODO  Implement reservation logic
     }
 
     public boolean isLaneAvailable(Long laneId, LocalDate date, Integer startHour, Integer endHour) {
@@ -50,17 +46,13 @@ public class ReservationService {
 
     }
 
-
     public boolean isLaneReservedOnDateAtHour(Long laneId, LocalDate date, int hour) {
-        // Ustal przedział czasowy do sprawdzenia
         LocalDateTime startTime = date.atTime(hour, 0);
         LocalDateTime endTime = date.atTime(hour + 1, 0);
 
-        // Pobierz obiekt Lane z bazy danych lub utwórz proxy
         Lane lane = new Lane();
         lane.setId(laneId);
 
-        // Sprawdź, czy istnieje kolidująca rezerwacja
         return reservationRepository.existsByLaneAndStartTimeLessThanAndEndTimeGreaterThan(lane, endTime, startTime);
     }
 
@@ -76,5 +68,15 @@ public class ReservationService {
     public List<Reservation> getUpcomingReservationsForUser(Long userId) {
         LocalDateTime now = LocalDateTime.now();
         return reservationRepository.findByUserIdAndEndTimeAfter(userId, now);
+    }
+
+    public List<Reservation> getAllUpcomingReservations () {
+        LocalDateTime now = LocalDateTime.now();
+        return reservationRepository.findAllByEndTimeAfter(now);
+    }
+
+    public List<Reservation> getAllPastReservations () {
+        LocalDateTime now = LocalDateTime.now();
+        return reservationRepository.findAllByEndTimeBefore(now);
     }
 }

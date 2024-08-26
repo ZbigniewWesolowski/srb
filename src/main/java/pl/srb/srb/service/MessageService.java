@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.srb.srb.model.Message;
 import pl.srb.srb.repository.MessageRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +28,16 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages() {
-        return messageRepository.findAll();
+        List <Message> messages = new ArrayList<>();
+        for (Message msg : messageRepository.findAll()) {
+            if (msg.getReplayTo() == null) {
+                msg.setReplayTo(msg.getUser().getEmail());
+                messages.add(msg);
+            }
+            else {
+                messages.add(msg);
+            }
+        }
+        return messages;
     }
 }
